@@ -14,7 +14,7 @@ const App = () => {
   };
 
   const closeAlert = () => {
-    console.log('Hello')
+    setShowAlert(false)
   };
   const getAlert = () => {
     setShowAlert(true);
