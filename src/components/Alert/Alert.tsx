@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 interface Props extends React.PropsWithChildren {
   type: 'primary' | 'success' | 'danger' | 'warning';
   onDismiss?: () => void;
+  clickDismissable?: boolean;
 }
 
-const Alert: React.FC<Props> = ({type, onDismiss, children}) => {
-  const className: string[] = ['alert', 'd-flex'];
+const Alert: React.FC<Props> = ({type, clickDismissable = false, onDismiss, children}) => {
+  const [show, setShow] = useState<boolean>(true);
   const alertColor: string = `alert-${type}`;
-  className.push(alertColor);
+  const className: string[] = ['alert', alertColor];
+
   let closeButton: React.ReactNode | null = (
     <button
       type="button"
@@ -17,16 +19,27 @@ const Alert: React.FC<Props> = ({type, onDismiss, children}) => {
       aria-label="Close"
       onClick={() => onDismiss ? onDismiss() : undefined}
     ></button>);
-  if (!onDismiss) {
+
+  const closeAlert = () => {
+    if (clickDismissable) {
+      setShow(false);
+    }
+  };
+
+  if (!onDismiss || clickDismissable) {
     closeButton = null;
   }
   return (
     <div
       className={className.join(' ')}
       role="alert"
+      onClick={() => closeAlert()}
+      style={{display: show ? 'block' : 'none'}}
     >
-      {children}
-      {closeButton}
+      <div className="d-flex">
+        {children}
+        {closeButton}
+      </div>
     </div>
   );
 };

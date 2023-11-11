@@ -33,10 +33,12 @@ const App = () => {
 
   let alert: ReactNode | null = null;
   if (showAlert) {
-    alert = (<Alert
-      type="warning"
-      onDismiss={closeAlert}
-    >This is a warning type alert</Alert>);
+    alert = (
+      <Alert
+        type="danger"
+        onDismiss={closeAlert}
+      >This is a warning type alert</Alert>
+    );
   }
 
   return (
@@ -59,9 +61,10 @@ const App = () => {
         buttons={buttons}
         title="Some kinda modal title"
       >
-        <p>This is modal content!</p>
+        <p>This is some modal content... If you press continue button Alert will open</p>
       </Modal>
       {alert}
+      <Alert type="warning" clickDismissable>This warning will close when you click</Alert>
     </>
   );
 };
