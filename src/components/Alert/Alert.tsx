@@ -41,6 +41,13 @@ const Alert: React.FC<Props> = ({type, showWindow, clickDismissable, onDismiss, 
     closeButton = null;
   }
 
+  const visible: React.CSSProperties = {
+    display: 'block'
+  };
+  if (!showWindow) {
+    visible.display = 'none';
+  }
+
   return (
     <motion.div
       animate={showWindow ? 'open' : 'closed'}
@@ -51,7 +58,7 @@ const Alert: React.FC<Props> = ({type, showWindow, clickDismissable, onDismiss, 
         className={className.join(' ')}
         role="alert"
         onClick={() => clickDismissable ? clickDismissable() : undefined}
-        style={{display: 'block'}}
+        style={visible}
       >
         <div className="d-flex">
           {children}

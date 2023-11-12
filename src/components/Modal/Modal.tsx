@@ -40,10 +40,10 @@ const Modal: React.FC<Props> = ({show, onClose, title, buttons, children}) => {
   });
 
   const visible: React.CSSProperties = {
-    display: 'none'
+    display: 'block'
   };
-  if (show) {
-    visible.display = 'block';
+  if (!show) {
+    visible.display = 'none';
   }
 
   const onInnerClick = (event: React.MouseEvent) => {
