@@ -1,4 +1,4 @@
-import {ReactNode, useState} from 'react';
+import React, {useState} from 'react';
 import Modal from '../components/Modal/Modal';
 import Alert from '../components/Alert/Alert';
 import {ButtonConfig} from '../type';
@@ -31,16 +31,6 @@ const App = () => {
     setShowAlert(true);
   };
 
-  let alert: ReactNode | null = null;
-  if (showAlert) {
-    alert = (
-      <Alert
-        type="danger"
-        onDismiss={closeAlert}
-      >This is a warning type alert</Alert>
-    );
-  }
-
   return (
     <>
       <button
@@ -55,6 +45,11 @@ const App = () => {
         onClick={getAlert}
       >Show Alert
       </button>
+      <Alert
+        type="warning"
+        showWindow={showAlert}
+        clickDismissable={closeAlert}
+      >This warning will close when you click</Alert>
       <Modal
         show={showModal}
         onClose={cancel}
@@ -63,8 +58,6 @@ const App = () => {
       >
         <p>This is some modal content... If you press continue button Alert will open</p>
       </Modal>
-      {alert}
-      <Alert type="warning" clickDismissable>This warning will close when you click</Alert>
     </>
   );
 };

@@ -1,13 +1,30 @@
-import React, {useState} from 'react';
+import React from 'react';
+import {HTMLMotionProps, motion} from 'framer-motion';
 
 interface Props extends React.PropsWithChildren {
   type: 'primary' | 'success' | 'danger' | 'warning';
+  showWindow: boolean;
   onDismiss?: () => void;
-  clickDismissable?: boolean;
+  clickDismissable?: () => void;
 }
 
-const Alert: React.FC<Props> = ({type, clickDismissable = false, onDismiss, children}) => {
-  const [show, setShow] = useState<boolean>(true);
+interface StyleProps extends HTMLMotionProps<'div'> {
+  opacity: number;
+  x: number;
+  display: string;
+}
+
+interface Variants {
+  open: StyleProps;
+  closed: StyleProps;
+}
+
+const alertVariants: Variants = {
+  open: {opacity: 1, x: 0, display: 'block'},
+  closed: {opacity: 0, x: -100, display: 'none'},
+};
+
+const Alert: React.FC<Props> = ({type, showWindow, clickDismissable, onDismiss, children}) => {
   const alertColor: string = `alert-${type}`;
   const className: string[] = ['alert', alertColor];
 
@@ -20,27 +37,28 @@ const Alert: React.FC<Props> = ({type, clickDismissable = false, onDismiss, chil
       onClick={() => onDismiss ? onDismiss() : undefined}
     ></button>);
 
-  const closeAlert = () => {
-    if (clickDismissable) {
-      setShow(false);
-    }
-  };
-
-  if (!onDismiss || clickDismissable) {
+  if (!onDismiss) {
     closeButton = null;
   }
+
   return (
-    <div
-      className={className.join(' ')}
-      role="alert"
-      onClick={() => closeAlert()}
-      style={{display: show ? 'block' : 'none'}}
+    <motion.div
+      animate={showWindow ? 'open' : 'closed'}
+      variants={alertVariants ? alertVariants : {}}
+      transition={{ease: 'easeOut', duration: 1}}
     >
-      <div className="d-flex">
-        {children}
-        {closeButton}
+      <div
+        className={className.join(' ')}
+        role="alert"
+        onClick={() => clickDismissable ? clickDismissable() : undefined}
+        style={{display: 'block'}}
+      >
+        <div className="d-flex">
+          {children}
+          {closeButton}
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
